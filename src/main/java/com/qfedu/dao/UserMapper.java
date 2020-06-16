@@ -23,6 +23,7 @@ public interface UserMapper {
     public void updateUser(User user);
     //添加用户
     public int addUser(User user);
-
+    //根据Id删除用户
+    public int deleUser();
 
 }
