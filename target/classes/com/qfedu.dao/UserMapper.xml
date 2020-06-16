@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+    <mapper namespace="com.qfedu.dao.UserMapper">
+
+        <sql id="BOOKS_FIELD">
+            select stuId,stuname,stuBir,stuHobby,stuAge,gradeId, pwd from t_users
+        </sql>
+
+    <!--查询全部-->
+    <select id="findAll" resultType="com.qfedu.pojo.User">
+        <include refid="BOOKS_FIELD"/>
+
+    </select>
+
+    <!--根据Id查询全部-->
+    <select id="findAllById" resultType="com.qfedu.pojo.User">
+        <include refid="BOOKS_FIELD"/>
+            <where>
+                stuId in
+            </where>
+            <foreach collection="list" open="(" close = ")"
+                separator = "," item = "stuId">
+                #{stuId}
+            </foreach>
+    </select>
+
+    <!--根据username查询人员-->
+    <select id="findByUserName" resultType="com.qfedu.pojo.User">
+        <include refid="BOOKS_FIELD"/>
+         <where>
+            <if test="stuName != null">
+                stuName = #{stuName}
+            </if>
+        </where>
+    </select>
+
+    <!--根据Id修改姓名-->
+    <select id="updateUser">
+        update t_users
+        <set>
+            <if test="stuName != null">
+                stuName=#{stuName}
+            </if>
+        </set>
+        <where>
+
+            <if test="stuId != null">
+               stuId=#{stuId}
+            </if>
+        </where>
+    </select>
+
+    <!--根据姓名模糊查询-->
+    <select id="findUserByNameLink" resultType="com.qfedu.pojo.User">
+        SELECT  *
+        FROM t_users
+        WHERE
+        <if test="stuName !=null or stuName !=''">
+            <bind name="stuName" value="'%' + stuName + '%'"/>
+            stuName like #{stuName}
+        </if>
+    </select>
+
+
+    <insert id="addUser" parameterType="com.qfedu.pojo.User">
+        insert into t_users(stuId,stuName,stuBir,stuHobby,stuAge,gradeId,imgPath,pwd)
+         values (#{stuId},#{stuName},#{stuBir},#{stuHobby},#{stuAge},#{gradeId},#{imgPath},#{pwd})
+    </insert>
+    <!--添加用户-->
+   <!-- <insert id="addUser" parameterType="com.qfedu.pojo.User" >
+        insert into t_users
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="stuId != null" >
+                stuId,
+            </if>
+            <if test="stuName != null" >
+                stuName,
+            </if>
+            <if test="stuBir != null" >
+                stuBir,
+            </if>
+            <if test="stuHobby != null" >
+                stuHobby,
+            </if>
+            <if test="stuAge != null" >
+                stuAge,
+            </if>
+            <if test="gradeId != null" >
+                gradeId,
+            </if>
+            <if test="imgPath != null" >
+                imgPath,
+            </if>
+            <if test="pwd != null" >
+                pwd,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="stuId != null" >
+                #{stuId},
+            </if>
+            <if test="stuName != null" >
+                #{stuName},
+            </if>
+            <if test="stuBir != null" >
+                #{stuBir},
+            </if>
+            <if test="stuHobby  != null" >
+                #{stuHobby},
+            </if>
+            <if test="stuAge != null" >
+                #{stuAge},
+            </if>
+            <if test="gradeId != null" >
+                #{gradeId},
+            </if>
+            <if test="imgPath != null" >
+                #{imgPath},
+            </if>
+            <if test="pwd != null" >
+                #{pwd},
+            </if>
+        </trim>
+    </insert>-->
+</mapper>
